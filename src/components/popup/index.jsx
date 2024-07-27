@@ -1,6 +1,10 @@
+import React from "react";
+import { useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 
 export const Popup = ({ showPopup, setShowPopup, description }) => {
+  const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
+
   return (
     <AnimatePresence>
       {showPopup && (
@@ -10,9 +14,13 @@ export const Popup = ({ showPopup, setShowPopup, description }) => {
           exit={{ opacity: 0 }}
           className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
         >
-          <div className="bg-white p-4 rounded shadow-md text-center">
+          <div
+            className={`p-4 rounded shadow-md text-center ${
+              isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"
+            }`}
+          >
             <p className="mb-4">{description}</p>
-            <Footer setShowPopup={setShowPopup} />
+            <Footer setShowPopup={setShowPopup} isDarkMode={isDarkMode} />
           </div>
         </motion.div>
       )}
@@ -20,12 +28,14 @@ export const Popup = ({ showPopup, setShowPopup, description }) => {
   );
 };
 
-const Footer = ({ setShowPopup }) => {
+const Footer = ({ setShowPopup, isDarkMode }) => {
   return (
     <div className="flex justify-center align-middle">
       <button
         onClick={() => setShowPopup(false)}
-        className="bg-green-500 text-white p-2 rounded"
+        className={`p-2 rounded text-white ${
+          isDarkMode ? "bg-green-700 " : "bg-green-500"
+        }`}
       >
         Confirm
       </button>
