@@ -7,6 +7,7 @@ export const Input = ({
   type,
   required,
   styleDetails = "",
+  onChange,
 }) => {
   const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
   return (
@@ -24,7 +25,7 @@ export const Input = ({
         id={id}
         name={name}
         className={
-          `border border-gray-300 rounded
+          `border border-gray-300 rounded w-full p-2
         ${
           isDarkMode
             ? "bg-gray-700 text-white border-gray-600"
@@ -32,6 +33,7 @@ export const Input = ({
         }
          ` + styleDetails
         }
+        onChange={onChange}
         required={required}
       />
     </div>

@@ -1,29 +1,47 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import bcrypt from "bcryptjs";
 import { Button } from "../../components/buttons";
+import Alert from "../../components/alerts";
+import { Input } from "../../components/inputs";
+import { login, signup } from "../../services/referral-app-api";
+import { useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [token, setToken] = useState("");
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const [alert, setAlert] = useState({ type: "", message: "" });
+  const navigate = useNavigate();
 
-  const handleSignup = async () => {
-    try {
-      await axios.post("/signup", { email, password });
-      alert("User created");
-    } catch (error) {
-      alert(error.response.data.error);
-    }
+  const closeAlert = () => {
+    setAlert({ type: "", message: "" });
   };
 
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post("/login", { email, password });
-      setToken(response.data.token);
-    } catch (error) {
-      alert(error.response.data.error);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (e, action) => {
+    e.preventDefault();
+    let response;
+    if (action === "signup") {
+      response = await signup(formData.email, formData.password);
+      if (response.success) {
+        setAlert({ type: "success", message: response.message });
+        navigate("/home");
+      } else {
+        setAlert({ type: "error", message: response.message });
+      }
+    } else if (action === "login") {
+      response = await login(formData.email, formData.password);
+      if (response.success) {
+        setAlert({ type: "success", message: response.message });
+        navigate("/home");
+      } else {
+        setAlert({ type: "error", message: response.message });
+      }
     }
   };
 
@@ -38,70 +56,60 @@ const AuthPage = () => {
           isDarkMode ? "bg-gray-800 text-white" : "bg-white text-black"
         }`}
       >
-        <div className="space-y-4">
+        {alert.message !== "" && (
+          <Alert
+            type={alert.type}
+            message={alert.message}
+            onClose={closeAlert}
+          />
+        )}
+        <form className="space-y-4" onSubmit={(e) => handleSubmit(e, "login")}>
           <div>
-            <label
-              htmlFor="email"
-              className={`block ${
-                isDarkMode ? "text-gray-300" : "text-gray-700"
-              }`}
-            >
-              Email
-            </label>
-            <input
-              type="email"
+            <Input
+              label="Email"
               id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={`mt-1 p-2 rounded w-full ${
-                isDarkMode
-                  ? "bg-gray-700 text-white border-gray-600"
-                  : "border-gray-300"
-              }`}
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
           </div>
           <div>
-            <label
-              htmlFor="password"
-              className={`block ${
-                isDarkMode ? "text-gray-300" : "text-gray-700"
-              }`}
-            >
-              Password
-            </label>
-            <input
-              type="password"
+            <Input
+              label="Password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={`mt-1 p-2 rounded w-full ${
-                isDarkMode
-                  ? "bg-gray-700 text-white border-gray-600"
-                  : "border-gray-300"
-              }`}
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
             />
           </div>
-          <div className="flex flex-col space-y-1">
+          <div className="space-y-2">
             <Button
-              onClick={handleLogin}
-              styleDetails={`p-2 ${
+              type="button"
+              onClick={(e) => handleSubmit(e, "signup")}
+              styleDetails={`w-full p-2 rounded ${
                 isDarkMode
-                  ? "bg-green-700 text-white"
-                  : "bg-green-500 text-black"
+                  ? "bg-yellow-500 text-gray-800"
+                  : "bg-green-500 text-white"
               }`}
             >
-              Login
+              Sign Up
             </Button>
             <Button
-              onClick={handleSignup}
-              styleDetails={`p-2 ${
-                isDarkMode ? "text-green-500" : "text-green-600"
+              type="submit"
+              styleDetails={`w-full p-2 rounded ${
+                isDarkMode
+                  ? "bg-yellow-500 text-gray-800"
+                  : "bg-blue-500 text-white"
               }`}
             >
-              Signup
+              Log In
             </Button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
