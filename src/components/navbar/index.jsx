@@ -100,7 +100,7 @@ const SignOut = () => {
     <Tooltip content="Sign out">
       <Button
         onClick={handleSignOut}
-        styleDetails="p-2 rounded bg-red-500 text-white"
+        styleDetails="p-2 rounded-full bg-red-500 text-white dark:bg-red-800"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

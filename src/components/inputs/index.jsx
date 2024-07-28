@@ -40,7 +40,14 @@ export const Input = ({
   );
 };
 
-export const TextArea = ({ label, id, name, required, styleDetails = "" }) => {
+export const TextArea = ({
+  label,
+  id,
+  name,
+  required,
+  styleDetails = "",
+  onChange,
+}) => {
   const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
   return (
     <div>
@@ -55,6 +62,7 @@ export const TextArea = ({ label, id, name, required, styleDetails = "" }) => {
       <textarea
         id={id}
         name={name}
+        onChange={onChange}
         className={
           `border border-gray-300 rounded 
         ${

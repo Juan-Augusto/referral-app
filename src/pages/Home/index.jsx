@@ -3,8 +3,8 @@ import { Input, TextArea } from "../../components/inputs";
 import { Button } from "../../components/buttons";
 import { Popup } from "../../components/popup";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import { Layout } from "../../components/layout";
+import { getReferrals, submitReferral } from "../../services/referral-app-api";
 
 const LandingPage = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -16,11 +16,9 @@ const LandingPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/referrals", {
-        email: referralEmail,
-        description: referralDescription,
-      });
-      setShowPopup(true);
+      await submitReferral(referralEmail, referralDescription);
+      const referrals = await getReferrals();
+      setReferrals(referrals);
     } catch (error) {
       console.error("Error submitting referral", error);
     }
@@ -42,8 +40,8 @@ const LandingPage = () => {
   useEffect(() => {
     const fetchReferrals = async () => {
       try {
-        const response = await axios.get("/api/referrals");
-        setReferrals(response.data);
+        const response = await getReferrals();
+        setReferrals(response);
       } catch (error) {
         console.error("Error fetching referrals", error);
       }
@@ -110,18 +108,28 @@ const LandingPage = () => {
           />
 
           <div className="mt-8">
-            <h2 className="text-lg font-semibold">Track Referral Status</h2>
+            <h2
+              className="text-lg font-semibold text-slate-600
+              dark:text-white
+            "
+            >
+              Track Referral Status
+            </h2>
             <ul className="mt-4 space-y-2">
               {referrals.map((referral) => (
                 <li
                   key={referral.id}
-                  className={`p-2 rounded ${
-                    isDarkMode
-                      ? "bg-gray-700 text-white"
-                      : "bg-gray-200 text-black"
-                  }`}
+                  className="p-2 rounded bg-gray-200 text-slate-600
+                  dark:bg-gray-700 dark:text-white
+                "
                 >
-                  {referral.email} - {referral.status}
+                  <p>Email: {referral.referralEmail}</p>
+                  <p>Status: {referral.status}</p>
+                  {referral.code && (
+                    <p>
+                      Code: {referral.code} (${referral.amount})
+                    </p>
+                  )}
                 </li>
               ))}
             </ul>

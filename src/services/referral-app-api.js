@@ -42,11 +42,12 @@ export const login = async (email, password) => {
     statusCode: 0,
   };
   try {
-    const token = await provider.post("/login", {
+    const loginData = await provider.post("/login", {
       email,
       password,
     });
-    localStorage.setItem("token", token.data.token);
+    localStorage.setItem("token", loginData.data.token);
+    localStorage.setItem("userID", loginData.data.id);
     response = {
       success: true,
       message: "User logged in",
@@ -61,5 +62,37 @@ export const login = async (email, password) => {
       statusCode: error.response.status,
     };
     return response;
+  }
+};
+
+export const submitReferral = async (referralEmail, referralDescription) => {
+  const token = localStorage.getItem("token");
+  const userID = localStorage.getItem("userID");
+  const provider = referralAppProvider();
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  await provider.post(
+    "/referrals",
+    {
+      referralEmail,
+      referralDescription,
+      userID,
+    },
+    {
+      headers,
+    }
+  );
+};
+
+export const getReferrals = async () => {
+  const provider = referralAppProvider();
+  try {
+    const response = await provider.get("/referrals");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching referrals", error);
   }
 };

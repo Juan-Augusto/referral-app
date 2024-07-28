@@ -102,7 +102,7 @@ const AuthPage = () => {
               type="submit"
               styleDetails={`w-full p-2 rounded ${
                 isDarkMode
-                  ? "bg-yellow-500 text-gray-800"
+                  ? "bg-blue-500 text-gray-800"
                   : "bg-blue-500 text-white"
               }`}
             >
