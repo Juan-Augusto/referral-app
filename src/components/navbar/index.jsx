@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toggleDarkModeAction } from "../../store/actions/darkMode.actions";
 import { useSelector } from "react-redux";
 import { Button } from "../buttons";
 import Tooltip from "../tooltip";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const NavBar = () => {
   const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
@@ -89,10 +90,12 @@ const DarkModeToggle = ({ isDarkMode, toggleDarkMode }) => {
 };
 
 const SignOut = () => {
+  const { logout } = useAuth0();
+
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    localStorage.removeItem("token");
+    logout({ returnTo: window.location.origin });
     navigate("/");
   };
 

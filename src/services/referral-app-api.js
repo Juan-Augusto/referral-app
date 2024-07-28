@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { referralAppProvider } from "../providers/referral-app.provider";
 import bcrypt from "bcryptjs";
+
 export const signup = async (email, password) => {
   const provider = referralAppProvider();
   let response = {

@@ -6,7 +6,7 @@ const buttonVariants = {
     boxShadow: "0px 0px 8px rgb(34, 34, 34)",
     transition: {
       duration: 0.3,
-      yoyo: Infinity, // yoyo makes the animation repeat
+      yoyo: Infinity,
     },
   },
   tap: {

@@ -5,8 +5,11 @@ import { Popup } from "../../components/popup";
 import { useSelector } from "react-redux";
 import { Layout } from "../../components/layout";
 import { getReferrals, submitReferral } from "../../services/referral-app-api";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const LandingPage = () => {
+  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+
   const [showPopup, setShowPopup] = useState(false);
   const [referrals, setReferrals] = useState([]);
   const [referralEmail, setReferralEmail] = useState("");
@@ -37,7 +40,17 @@ const LandingPage = () => {
     }
   }, [isDarkMode]);
 
+  const handleAuthSaveCredentials = () => {
+    if (isAuthenticated) {
+      getAccessTokenSilently().then((token) => {
+        localStorage.setItem("token", token);
+      });
+      localStorage.setItem("email", user.email);
+    }
+  };
+
   useEffect(() => {
+    handleAuthSaveCredentials();
     const fetchReferrals = async () => {
       try {
         const response = await getReferrals();
@@ -47,7 +60,7 @@ const LandingPage = () => {
       }
     };
     fetchReferrals();
-  }, []);
+  });
 
   return (
     <Layout>
