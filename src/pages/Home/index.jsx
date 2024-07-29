@@ -5,23 +5,24 @@ import { Popup } from "../../components/popup";
 import { useSelector } from "react-redux";
 import { Layout } from "../../components/layout";
 import { getReferrals, submitReferral } from "../../services/referral-app-api";
+import { ReferralItem } from "./components";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const LandingPage = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   const [showPopup, setShowPopup] = useState(false);
-  const [referrals, setReferrals] = useState([]);
   const [referralEmail, setReferralEmail] = useState("");
   const [referralDescription, setReferralDescription] = useState("");
-  const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
 
+  const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
+  const referrals = useSelector((state) => state.referrals.referrals);
+  console.log(referrals);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await submitReferral(referralEmail, referralDescription);
-      const referrals = await getReferrals();
-      setReferrals(referrals);
+      await getReferrals();
     } catch (error) {
       console.error("Error submitting referral", error);
     }
@@ -54,13 +55,13 @@ const LandingPage = () => {
     const fetchReferrals = async () => {
       try {
         const response = await getReferrals();
-        setReferrals(response);
+        console.log("Referrals fetched", response);
       } catch (error) {
         console.error("Error fetching referrals", error);
       }
     };
     fetchReferrals();
-  });
+  }, []);
 
   return (
     <Layout>
@@ -128,24 +129,17 @@ const LandingPage = () => {
             >
               Track Referral Status
             </h2>
-            <ul className="mt-4 space-y-2">
-              {referrals.map((referral) => (
-                <li
-                  key={referral.id}
-                  className="p-2 rounded bg-gray-200 text-slate-600
-                  dark:bg-gray-700 dark:text-white
-                "
-                >
-                  <p>Email: {referral.referralEmail}</p>
-                  <p>Status: {referral.status}</p>
-                  {referral.code && (
-                    <p>
-                      Code: {referral.code} (${referral.amount})
-                    </p>
-                  )}
-                </li>
-              ))}
-            </ul>
+            {referrals?.length === 0 ? (
+              <p className="text-slate-600 dark:text-white">
+                No referrals to display
+              </p>
+            ) : (
+              <ul className="mt-4 space-y-2">
+                {referrals.map((referral) => (
+                  <ReferralItem key={referral.id} referral={referral} />
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>

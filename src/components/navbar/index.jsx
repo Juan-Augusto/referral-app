@@ -26,6 +26,11 @@ const NavBar = () => {
             Home
           </Link>
         </li>
+        <li>
+          <Link to="/docs" className="dark:text-white text-slate-600">
+            Docs
+          </Link>
+        </li>
       </ul>
       <div className="flex space-x-1">
         <SignOut />

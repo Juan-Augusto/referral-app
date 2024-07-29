@@ -8,6 +8,7 @@ export const Input = ({
   required,
   styleDetails = "",
   onChange,
+  value = "",
 }) => {
   const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
   return (
@@ -35,6 +36,7 @@ export const Input = ({
         }
         onChange={onChange}
         required={required}
+        value={value}
       />
     </div>
   );
@@ -47,13 +49,14 @@ export const TextArea = ({
   required,
   styleDetails = "",
   onChange,
+  value = "",
 }) => {
   const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
   return (
     <div>
       <label
         htmlFor={name}
-        className={`block text-gray-700
+        className={`block text-gray-700 
         ${isDarkMode ? "text-white" : "text-gray-700"}
       `}
       >
@@ -64,7 +67,7 @@ export const TextArea = ({
         name={name}
         onChange={onChange}
         className={
-          `border border-gray-300 rounded 
+          `border border-gray-300 rounded p-2 
         ${
           isDarkMode
             ? "bg-gray-700 text-white border-gray-600"
@@ -72,6 +75,7 @@ export const TextArea = ({
         }
         ` + styleDetails
         }
+        value={value}
         required={required}
       ></textarea>
     </div>
