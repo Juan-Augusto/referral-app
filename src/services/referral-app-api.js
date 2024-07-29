@@ -117,9 +117,8 @@ export const cancelReferral = async (id) => {
   const provider = referralAppProvider();
   try {
     const response = await provider.delete(`/referrals/${id}`);
-
     await getReferrals();
-    return response.json();
+    return response;
   } catch (error) {
     console.error("Error canceling referral", error);
   }
