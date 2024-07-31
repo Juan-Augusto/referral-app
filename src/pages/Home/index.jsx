@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Input, TextArea } from "../../components/inputs";
 import { Button } from "../../components/buttons";
-import { Popup } from "../../components/popup";
+import Popup from "../../components/popup";
 import { useSelector } from "react-redux";
 import { Layout } from "../../components/layout";
 import { getReferrals } from "../../services/referral-app-api";

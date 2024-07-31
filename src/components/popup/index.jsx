@@ -2,12 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 
-export const Popup = ({
-  showPopup,
-  setShowPopup,
-  description,
-  handleConfirm,
-}) => {
+const Popup = ({ showPopup, setShowPopup, description, handleConfirm }) => {
   const isDarkMode = useSelector((state) => state.darkMode.isDarkMode);
 
   return (
@@ -52,3 +47,5 @@ const Footer = ({ setShowPopup, isDarkMode, handleConfirm }) => {
     </div>
   );
 };
+
+export default Popup;
