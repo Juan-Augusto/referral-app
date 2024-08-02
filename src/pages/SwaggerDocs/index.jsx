@@ -8,7 +8,7 @@ const ApiDocumentation = () => {
   return (
     <Layout>
       <SwaggerUI
-        url="http://localhost:5000/api-docs/swagger.json"
+        url="https://referral-app-backend.onrender.com/api-docs/swagger.json"
         spec={spec}
       />
     </Layout>
