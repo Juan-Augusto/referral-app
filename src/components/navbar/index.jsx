@@ -96,11 +96,13 @@ const DarkModeToggle = ({ isDarkMode, toggleDarkMode }) => {
 
 const SignOut = () => {
   const { logout } = useAuth0();
-
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    logout({ returnTo: window.location.origin });
+    logout({
+      returnTo:
+        process.env.REACT_APP_LOGOUT_REDIRECT_URI || window.location.origin,
+    });
     navigate("/");
   };
 
