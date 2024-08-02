@@ -98,8 +98,8 @@ const SignOut = () => {
   const { logout } = useAuth0();
   const navigate = useNavigate();
 
-  const handleSignOut = () => {
-    logout({
+  const handleSignOut = async () => {
+    await logout({
       returnTo:
         process.env.REACT_APP_LOGOUT_REDIRECT_URI || window.location.origin,
     });
@@ -109,7 +109,7 @@ const SignOut = () => {
   return (
     <Tooltip content="Sign out">
       <Button
-        onClick={handleSignOut}
+        onClick={async () => await handleSignOut()}
         styleDetails="p-2 rounded-full bg-red-500 text-white dark:bg-red-800"
       >
         <svg
